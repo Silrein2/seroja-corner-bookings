@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "seroja-corner-booking",
     "public": "dist",
     "ignore": [
       "firebase.json",
