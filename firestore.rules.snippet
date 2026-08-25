@@ -1,0 +1,12 @@
+// ---------------------------------------------------------------------------
+// ADD THIS BLOCK to your existing firestore.rules (inside the
+// `match /databases/{database}/documents { ... }` block) and deploy with:
+//     firebase deploy --only firestore:rules
+//
+// It only affects the standalone prototype's own collection. Nothing else in
+// your main app's rules changes. Because this prototype has no authentication,
+// the rules are fully open — LOCK THIS DOWN before any real rollout.
+// ---------------------------------------------------------------------------
+match /standalone_bookings/{document} {
+  allow read, create, update, delete: if true;
+}
