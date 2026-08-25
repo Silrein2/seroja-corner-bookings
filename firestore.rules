@@ -1,0 +1,51 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 1. Settings (Global Config)
+    // Anyone can read (for the booking page to load settings/images)
+    // Only logged in users (Admins) can edit
+    match /settings/{document} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 2. Rooms & Packages
+    // Anyone can read (to see available rooms/packages)
+    // Only logged in users can create/edit/delete
+    match /rooms/{document} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /packages/{document} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 3. Bookings
+    // Guests need to read confirmed bookings to check availability.
+    // Guests need to create bookings.
+    // Only Admins can edit/delete them later.
+    match /bookings/{document} {
+      allow read: if true; // Technically less secure, but required for your availability checker
+      allow create: if true; 
+      allow update, delete: if request.auth != null;
+    }
+
+    // 4. Reviews & Audit Logs
+    // Guests can submit reviews, but only Admins can read them
+    match /reviews/{document} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+    
+    // Only Admins can see/write audit logs
+    match /audit_logs/{document} {
+      allow read, write: if request.auth != null;
+    }
+    
+    match /standalone_bookings/{document} {
+      allow read, create, update, delete: if true;
+    }
+  }
+}
